@@ -30,7 +30,7 @@ return array(
 	'itemsperpage' => 'items per page',
 	'noresults' => 'No Results',
 	'backtosite' => 'Back to Site',
-	'logout' => 'Logout',
+	'logout' => '1234567890*-',
 
 	'previous' => 'prev',
 	'next' => 'next',
