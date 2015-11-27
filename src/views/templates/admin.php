@@ -1,6 +1,6 @@
-<div class="table_container">
+<div class="table_container" style="background-color: #fff;border-radius: 2px;">
 
-	<div class="results_header">
+	<div class="results_header" style="background:transparent;">
 		<h2 data-bind="text: modelTitle"></h2>
 
 		<div class="actions">
@@ -23,7 +23,7 @@
 										notification: globalStatusMessage "></div>
 	</div>
 
-	<div class="page_container">
+	<div class="page_container" style="background:transparent;">
 		<div class="per_page">
 			<input type="hidden" data-bind="value: rowsPerPage, select2: {minimumResultsForSearch: -1, data: {results: rowsPerPageOptions},
 											allowClear: false}" />
@@ -39,11 +39,11 @@
 		</div>
 	</div>
 
-	<table class="results" border="0" cellspacing="0" id="customers" cellpadding="0">
+	<table class="table table-bordered table-striped dataTable" border="0" cellspacing="0" id="customers" cellpadding="0">
 		<thead>
 			<tr>
 				<!-- ko foreach: columns -->
-					<th data-bind="visible: visible, css: {sortable: sortable,
+					<th style="cursor:pointer;" class="sorting_asc" data-bind="visible: visible, css: {sortable: sortable,
 	'sorted-asc': (column_name == $root.sortOptions.field() || sort_field == $root.sortOptions.field()) && $root.sortOptions.direction() === 'asc',
 	'sorted-desc': (column_name == $root.sortOptions.field() || sort_field == $root.sortOptions.field()) && $root.sortOptions.direction() === 'desc'}">
 						<!-- ko if: sortable -->
@@ -59,7 +59,7 @@
 		</thead>
 		<tbody>
 			<!-- ko foreach: rows -->
-				<tr data-bind="click: function() {$root.clickItem($data[$root.primaryKey].raw); return true},
+				<tr style="cursor:pointer;" data-bind="click: function() {$root.clickItem($data[$root.primaryKey].raw); return true},
 							css: {result: true, even: $index() % 2 == 1, odd: $index() % 2 != 1,
 									selected: $data[$root.primaryKey].raw == $root.itemLoadingId()}">
 					<!-- ko foreach: $root.columns -->

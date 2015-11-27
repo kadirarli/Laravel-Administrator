@@ -82,7 +82,7 @@ class DataTable {
 		extract($this->prepareQuery($db, $page, $sort, $filters));
 
 		//run the count query
-		$output = $this->performCountQuery($countQuery, $querySql, $queryBindings, $page);
+		$output = $this->performCountQuery($countQuery, $querySql, $page);
 
 		//now we need to limit and offset the rows in remembrance of our dear lost friend paginate()
 		$query->take($this->rowsPerPage);
@@ -172,10 +172,7 @@ class DataTable {
 		//only select distinct rows
 		$query->distinct();
 
-		//load the query bindings
-		$queryBindings = $query->getBindings();
-
-		return compact('query', 'querySql', 'queryBindings', 'countQuery', 'sort', 'selects');
+		return compact('query', 'querySql', 'countQuery', 'sort', 'selects');
 	}
 
 	/**
@@ -183,12 +180,11 @@ class DataTable {
 	 *
 	 * @param \Illuminate\Database\Query\Builder	$countQuery
 	 * @param string								$querySql
-	 * @param array									$queryBindings
 	 * @param int									$page
 	 *
 	 * @return array
 	 */
-	public function performCountQuery(QueryBuilder $countQuery, $querySql, $queryBindings, $page)
+	public function performCountQuery(QueryBuilder $countQuery, $querySql, $page)
 	{
 		//grab the model instance
 		$model = $this->config->getDataModel();
@@ -197,8 +193,8 @@ class DataTable {
 		$sql = "SELECT COUNT({$model->getKeyName()}) AS aggregate FROM ({$querySql}) AS agg";
 
 		//then perform the count query
-		$results = $countQuery->getConnection()->select($sql, $queryBindings);
-		$numRows = is_array($results[0]) ? $results[0]['aggregate'] : $results[0]->aggregate;
+		$results = $countQuery->getConnection()->select($sql, $countQuery->getBindings());
+		$numRows = $results[0]->aggregate;
 		$page = (int) $page;
 		$last = (int) ceil($numRows / $this->rowsPerPage);
 

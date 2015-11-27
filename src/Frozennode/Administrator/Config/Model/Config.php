@@ -40,7 +40,6 @@ class Config extends ConfigBase implements ConfigInterface {
 		'form_width' => 285,
 		'link' => null,
 		'rules' => false,
-		'messages' => false,
 	);
 
 	/**
@@ -71,7 +70,6 @@ class Config extends ConfigBase implements ConfigInterface {
 		'form_width' => 'integer',
 		'link' => 'callable',
 		'rules' => 'array',
-		'messages' => 'array',
 	);
 
 	/**
@@ -326,13 +324,11 @@ class Config extends ConfigBase implements ConfigInterface {
 		//fill the model with our input
 		$this->fillModel($model, $input, $fields);
 
+		//prepares the $data and $rules arrays
+		extract($this->prepareDataAndRules($model));
+
 		//validate the model
-		$data = $model->exists ? $model->getDirty() : $model->getAttributes();
-		$validation_data = array_merge($data, $this->getRelationshipInputs($input, $fields));
-		$rules = $this->getModelValidationRules();
-		$rules = $model->exists ? array_intersect_key($rules, $validation_data) : $rules;
-		$messages = $this->getModelValidationMessages();
-		$validation = $this->validateData($validation_data, $rules, $messages);
+		$validation = $this->validateData($data, $rules);
 
 		//if a string was kicked back, it's an error, so return it
 		if (is_string($validation)) return $validation;
@@ -350,6 +346,36 @@ class Config extends ConfigBase implements ConfigInterface {
 	}
 
 	/**
+	 * Sets the proper data attributes and rules arrays depending on whether or not the model exists
+	 *
+	 * @param \Illuminate\Database\Eloquent\Model	$model
+	 *
+	 * @return array	//'data' and 'rules' indexes both arrays
+	 */
+	public function prepareDataAndRules($model)
+	{
+		//fetch the rules if any exist
+		$rules = $this->getModelValidationRules();
+
+		//if the model exists, this is an update
+		if ($model->exists)
+		{
+			//only include dirty fields
+			$data = $model->getDirty();
+
+			//and validate the fields that are being updated
+			$rules = array_intersect_key($rules, $data);
+		}
+		else
+		{
+			//otherwise validate everything
+			$data = $model->getAttributes();
+		}
+
+		return compact('data', 'rules');
+	}
+
+	/**
 	 * Prepare a model for saving given a post input array
 	 *
 	 * @param \Illuminate\Database\Eloquent\Model	$model
@@ -360,15 +386,15 @@ class Config extends ConfigBase implements ConfigInterface {
 	 */
 	public function fillModel(&$model, \Illuminate\Http\Request $input, array $fields)
 	{
-		//run through the edit fields to see if we need to unset relationships or uneditable fields
+		//run through the edit fields to see if we need to unset relationships
 		foreach ($fields as $name => $field)
 		{
-			if (!$field->getOption('external') && $field->getOption('editable'))
+			if (!$field->getOption('external'))
 			{
 				$field->fillModel($model, $input->get($name, NULL));
 			}
-			//if this is an "external" field (i.e. it's not a column on this model's table) or uneditable, unset it
-			else if ($name !== $model->getKeyName())
+			//if this is an "external" field (i.e. it's not a column on this model's table), unset it
+			else
 			{
 				$model->__unset($name);
 			}
@@ -400,28 +426,15 @@ class Config extends ConfigBase implements ConfigInterface {
 		{
 			return $optionsRules;
 		}
-
-		//otherwise look for the rules as a static property on the model
-		return $rules = $this->getModelStaticValidationRules() ?: array();
-	}
-
-	/**
-	 * Gets the validation messages for this model
-	 *
-	 * @return array
-	 */
-	public function getModelValidationMessages()
-	{
-		$optionsMessages = $this->getOption('messages');
-
-		//if the 'rules' option was provided for this model, it takes precedent
-		if (is_array($optionsMessages))
+		//otherwise look for the
+		else if ($rules = $this->getModelStaticValidationRules())
 		{
-			return $optionsMessages;
+			return $rules;
 		}
-
-		//otherwise look for the messages as a static property on the model
-		return $rules = $this->getModelStaticValidationMessages() ?: array();
+		else
+		{
+			return array();
+		}
 	}
 
 	/**
@@ -434,60 +447,6 @@ class Config extends ConfigBase implements ConfigInterface {
 		$model = $this->getDataModel();
 
 		return isset($model::$rules) && is_array($model::$rules) ? $model::$rules : false;
-	}
-
-	/**
-	 * Gets the static messages propery for a model if one exists
-	 *
-	 * @return mixed
-	 */
-	public function getModelStaticValidationMessages()
-	{
-		$model = $this->getDataModel();
-
-		return isset($model::$messages) && is_array($model::$messages) ? $model::$messages : false;
-	}
-
-	/**
-	 * Gets the relationship inputs
-	 *
-	 * @param \Illuminate\Http\Request				$request
-	 * @param array									$fields
-	 *
-	 * @return array
-	 */
-	protected function getRelationshipInputs(\Illuminate\Http\Request $request, array $fields)
-	{
-		$inputs = array();
-
-		//run through the edit fields to find the relationships
-		foreach ($fields as $name => $field)
-		{
-			if ($field->getOption('external'))
-			{
-				$inputs[$name] = $this->formatRelationshipInput($request->get($name, NULL), $field);
-			}
-		}
-
-		return $inputs;
-	}
-
-	/**
-	 * Gets the formatted value of a relationship input
-	 *
-	 * @param string									$value
-	 * @param \Frozennode\Administrator\Fields\Field	$field
-	 *
-	 * @return mixed	array | string
-	 */
-	protected function formatRelationshipInput($value, Field $field)
-	{
-		$value = trim($value);
-
-		if ($field->getOption('multiple_values'))
-			$value = $value ? explode(',', $value) : array();
-
-		return $value;
 	}
 
 	/**

@@ -23,8 +23,6 @@ return array(
 	'imageuploading' => 'Kuvaa lähetetään',
 	'uploadfile' => 'Lähetä tiedosto',
 	'fileuploading' => 'File Uploading',
-	'no_image_uploaded' => 'No image uploaded',
-	'no_file_uploaded' => 'No file uploaded',
 	'none' => 'Ei mitään',
 	'all' => 'Kaikki',
 	'itemsperpage' => 'riviä per sivu',

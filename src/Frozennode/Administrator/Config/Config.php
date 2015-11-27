@@ -1,9 +1,8 @@
 <?php
 namespace Frozennode\Administrator\Config;
 
-use Frozennode\Administrator\Validator;
 use Frozennode\Administrator\Config\ConfigInterface;
-use Illuminate\Validation\Validator as CustomValidator;
+use Frozennode\Administrator\Validator;
 
 abstract class Config {
 
@@ -13,13 +12,6 @@ abstract class Config {
 	 * @var \Frozennode\Administrator\Validator
 	 */
 	protected $validator;
-
-	/**
-	 * The site's normal validator instance
-	 *
-	 * @var \Illuminate\Validation\Validator
-	 */
-	protected $customValidator;
 
 	/**
 	 * The user supplied options array
@@ -53,13 +45,11 @@ abstract class Config {
 	 * Create a new model Config instance
 	 *
 	 * @param \Frozennode\Administrator\Validator 	$validator
-	 * @param \Illuminate\Validation\Validator	 	$custom_validator
 	 * @param array 								$options
 	 */
-	public function __construct(Validator $validator, CustomValidator $custom_validator, array $options)
+	public function __construct(Validator $validator, array $options)
 	{
 		$this->validator = $validator;
-		$this->customValidator = $custom_validator;
 		$this->suppliedOptions = $options;
 	}
 
@@ -165,22 +155,19 @@ abstract class Config {
 	 *
 	 * @param array		$data
 	 * @param array		$rules
-	 * @param array		$messages
 	 *
 	 * @param mixed
 	 */
-	public function validateData(array $data, array $rules, array $messages)
+	public function validateData(array $data, array $rules)
 	{
 		if ($rules)
 		{
-			$this->customValidator->setData($data);
-			$this->customValidator->setRules($rules);
-			$this->customValidator->setCustomMessages($messages);
+			$this->validator->override($data, $rules);
 
 			//if the validator fails, kick back the errors
-			if ($this->customValidator->fails())
+			if ($this->validator->fails())
 			{
-				return implode('. ', $this->customValidator->messages()->all());
+				return implode('. ', $this->validator->messages()->all());
 			}
 		}
 

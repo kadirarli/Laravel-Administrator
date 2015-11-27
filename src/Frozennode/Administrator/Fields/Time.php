@@ -2,7 +2,6 @@
 namespace Frozennode\Administrator\Fields;
 
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use DateTime as DateTime;
 
 class Time extends Field {
 
@@ -42,7 +41,7 @@ class Time extends Field {
 		//try to read the time for the min and max values, and if they check out, set the where
 		if ($minValue = $this->getOption('min_value'))
 		{
-			$time = new DateTime($minValue);
+			$time = strtotime($minValue);
 
 			if ($time !== false)
 			{
@@ -52,7 +51,7 @@ class Time extends Field {
 
 		if ($maxValue = $this->getOption('max_value'))
 		{
-			$time = new DateTime($maxValue);
+			$time = strtotime($maxValue);
 
 			if ($time !== false)
 			{
@@ -71,14 +70,8 @@ class Time extends Field {
 	 */
 	public function fillModel(&$model, $input)
 	{
-		$time = false;
-
-        if (empty($input)) {
-            $model->{$this->getOption('field_name')} = null;
-            return;
-		} else if( !empty($input) && $input !== '0000-00-00') {
-			$time = new DateTime($input);
-		}
+		$val = ( is_null($input) || !is_string($input) ) ? '' : $input;
+		$time = strtotime($val);
 
 		//first we validate that it's a date/time
 		if ($time !== false)
@@ -95,19 +88,19 @@ class Time extends Field {
 	 *
 	 * @return string
 	 */
-	public function getDateString(DateTime $time)
+	public function getDateString($time)
 	{
 		if ($this->getOption('type') === 'date')
 		{
-			return $time->format('Y-m-d');
+			return date('Y-m-d', $time);
 		}
 		else if ($this->getOption('type') === 'datetime')
 		{
-			return $time->format('Y-m-d H:i:s');
+			return date('Y-m-d H:i:s', $time);
 		}
 		else
 		{
-			return $time->format('H:i:s');
+			return date('H:i:s', $time);
 		}
 	}
 }

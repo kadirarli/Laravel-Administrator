@@ -23,8 +23,6 @@ return array(
 	'imageuploading' => 'Đang tải ảnh',
 	'uploadfile' => 'Tải tệp lên',
 	'fileuploading' => 'Đang tải tệp',
-	'no_image_uploaded' => 'No image uploaded',
-	'no_file_uploaded' => 'No file uploaded',
 	'none' => 'Rỗng',
 	'all' => 'Tất cả',
 	'itemsperpage' => 'Số phần tử một trang',

@@ -16,17 +16,13 @@
 			<div data-bind="attr: {class: type}">
 				<label data-bind="attr: {for: field_id}, text: title + ':'"></label>
 
-			<!-- ko if: $data.description && type !== 'bool' && type !== 'key' -->
-				<p class="description" data-bind="text: description"></p>
-			<!-- /ko -->
-
 			<!-- ko if: type === 'key' -->
 				<span data-bind="text: $root[$root.primaryKey]"></span>
 			<!-- /ko -->
 
 			<!-- ko if: type === 'text' -->
+				<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
 				<!-- ko if: editable -->
-					<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
 					<input type="text" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name],
 																			valueUpdate: 'afterkeydown', characterLimit: limit" />
 				<!-- /ko -->
@@ -36,9 +32,9 @@
 			<!-- /ko -->
 
 			<!-- ko if: type === 'textarea' -->
+				<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
 				<!-- ko if: editable -->
-					<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
-					<textarea data-bind="attr: {disabled: $root.freezeForm || !editable, id: field_id}, value: $root[field_name],
+				<textarea data-bind="attr: {disabled: $root.freezeForm || !editable, id: field_id}, value: $root[field_name],
 																		valueUpdate: 'afterkeydown', characterLimit: limit,
 																		style: {height: height + 'px'}"></textarea>
 				<!-- /ko -->
@@ -48,8 +44,13 @@
 			<!-- /ko -->
 
 			<!-- ko if: type === 'wysiwyg' -->
-				<textarea class="wysiwyg" data-bind="attr: {disabled: $root.freezeForm, id: field_id},
-							wysiwyg: {value: $root[field_name], id: field_id}"></textarea>
+				<!-- ko if: editable -->
+					<textarea class="wysiwyg" data-bind="attr: {disabled: $root.freezeForm, id: field_id},
+											wysiwyg: {value: $root[field_name], id: field_id}"></textarea>
+				<!-- /ko -->
+				<!-- ko ifnot: editable -->
+					<div class="uneditable" data-bind="html: $root[field_name]"></div>
+				<!-- /ko -->
 			<!-- /ko -->
 
 			<!-- ko if: type === 'markdown' -->
@@ -67,14 +68,9 @@
 			<!-- /ko -->
 
 			<!-- ko if: type === 'password' -->
-				<!-- ko if: editable -->
-					<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
-					<input type="password" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name],
+				<div class="characters_left" data-bind="charactersLeft: {value: $root[field_name], limit: limit}"></div>
+				<input type="password" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name],
 																		valueUpdate: 'afterkeydown', characterLimit: limit" />
-				<!-- /ko -->
-				<!-- ko ifnot: editable -->
-					<div class="uneditable" data-bind="text: '********'"></div>
-				<!-- /ko -->
 			<!-- /ko -->
 
 			<!-- ko if: type === 'belongs_to' -->
@@ -135,18 +131,13 @@
 					<input type="checkbox" data-bind="attr:{disabled: $root.freezeForm, id: field_id}, bool: field_name, checked: $root[field_name]" />
 				<!-- /ko -->
 				<!-- ko ifnot: editable -->
-					<span data-bind="text: parseInt($root[field_name]()) ? 'yes' : 'no'"></span>
+					<span data-bind="text: $root[field_name]() ? 'yes' : 'no'"></span>
 				<!-- /ko -->
 			<!-- /ko -->
 
 			<!-- ko if: type === 'enum' -->
-				<!-- ko if: editable -->
-					<input type="hidden" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name],
-													select2: {data: {results: options}}"></select>
-				<!-- /ko -->
-				<!-- ko ifnot: editable -->
-					<div class="uneditable" data-bind="enumText: { value: $root[field_name](), enumOptions: options }"></div>
-				<!-- /ko -->
+				<input type="hidden" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name],
+												select2: {data: {results: options}}"></select>
 			<!-- /ko -->
 
 			<!-- ko if: type === 'date' -->
@@ -181,82 +172,49 @@
 			<!-- /ko -->
 
 			<!-- ko if: type === 'image' -->
-				<!-- ko if: editable -->
-					<div class="upload_container" data-bind="attr: {id: field_id}">
-						<div class="uploader" data-bind="attr: {disabled: $root.freezeForm, id: field_name + '_uploader'}, value: $root.activeItem,
-												fileupload: {field: field_name, size_limit: size_limit, uploading: uploading, image: true,
-															upload_percentage: upload_percentage, upload_url: upload_url}">
-																<?php echo trans('administrator::administrator.uploadimage') ?></div>
-						<!-- ko if: uploading -->
-							<div class="uploading"
-							data-bind="text: '<?php echo trans('administrator::administrator.imageuploading') ?>' + upload_percentage() + '%'"></div>
-						<!-- /ko -->
-					</div>
-				<!-- /ko -->
+				<div class="upload_container" data-bind="attr: {id: field_id}">
+					<div class="uploader" data-bind="attr: {disabled: $root.freezeForm, id: field_name + '_uploader'}, value: $root.activeItem,
+											fileupload: {field: field_name, size_limit: size_limit, uploading: uploading, image: true,
+														upload_percentage: upload_percentage, upload_url: upload_url}">
+															<?php echo trans('administrator::administrator.uploadimage') ?></div>
+					<!-- ko if: uploading -->
+						<div class="uploading"
+						data-bind="text: '<?php echo trans('administrator::administrator.imageuploading') ?>' + upload_percentage() + '%'"></div>
+					<!-- /ko -->
+				</div>
+
 				<!-- ko if: $root[field_name]() && !$root.loadingItem() -->
 					<div class="image_container">
-						<!-- ko if: display_raw_value && !$root.fieldIsDirty(field_name) -->
-							<img data-bind="attr: {src: $root[field_name]()}" onload="window.admin.resizePage()" />
-						<!-- /ko -->
-						<!-- ko if: !display_raw_value || $root.fieldIsDirty(field_name) -->
-							<img data-bind="attr: {src: file_url + '?path=' + location + $root[field_name]()}" onload="window.admin.resizePage()" />
-						<!-- /ko -->
-
-						<!-- ko if: editable -->
-							<input type="button" class="remove_button" data-bind="click: function() {$root[field_name](null)}" value="x" />
-						<!-- /ko -->
+						<img data-bind="attr: {src: file_url + '?path=' + location + $root[field_name]()}" onload="window.admin.resizePage()" />
+						<input type="button" class="remove_button" data-bind="click: function() {$root[field_name](null)}" value="x" />
 					</div>
-				<!-- /ko -->
-				<!-- ko if: !$root[field_name]() && !editable -->
-					<div class="uneditable" data-bind="text: '<?php echo trans('administrator::administrator.no_image_uploaded') ?>'"></div>
 				<!-- /ko -->
 			<!-- /ko -->
 
 			<!-- ko if: type === 'file' -->
-				<!-- ko if: editable -->
-					<div class="upload_container" data-bind="attr: {id: field_id}">
-						<div class="uploader" data-bind="attr: {disabled: $root.freezeForm, id: field_name + '_uploader'}, value: $root.activeItem,
-												fileupload: {field: field_name, size_limit: size_limit, uploading: uploading,
-															upload_percentage: upload_percentage, upload_url: upload_url}">
-																<?php echo trans('administrator::administrator.uploadfile') ?></div>
-						<!-- ko if: uploading -->
-							<div class="uploading"
-							data-bind="text: '<?php echo trans('administrator::administrator.fileuploading') ?>' + upload_percentage() + '%'"></div>
-						<!-- /ko -->
-					</div>
-				<!-- /ko -->
+				<div class="upload_container" data-bind="attr: {id: field_id}">
+					<div class="uploader" data-bind="attr: {disabled: $root.freezeForm, id: field_name + '_uploader'}, value: $root.activeItem,
+											fileupload: {field: field_name, size_limit: size_limit, uploading: uploading,
+														upload_percentage: upload_percentage, upload_url: upload_url}">
+															<?php echo trans('administrator::administrator.uploadfile') ?></div>
+					<!-- ko if: uploading -->
+						<div class="uploading"
+						data-bind="text: '<?php echo trans('administrator::administrator.fileuploading') ?>' + upload_percentage() + '%'"></div>
+					<!-- /ko -->
+				</div>
+
 				<!-- ko if: $root[field_name] -->
 					<div class="file_container">
-						<!-- ko if: display_raw_value && $root.fieldIsDirty(field_name) -->
-							<a data-bind="attr: {href: $root[field_name](), title: $root[field_name]}, text: $root[field_name]"></a>
-						<!-- /ko -->
-						<!-- ko if: !display_raw_value || $root.fieldIsDirty(field_name) -->
-							<a data-bind="attr: {href: file_url + '?path=' + location + $root[field_name](), title: $root[field_name]},
+						<a data-bind="attr: {href: file_url + '?path=' + location + $root[field_name](), title: $root[field_name]},
 							text: $root[field_name]"></a>
-						<!-- /ko -->
-
-						<!-- ko if: editable -->
-							<input type="button" class="remove_button" data-bind="click: function() {$root[field_name](null)}" value="x" />
-						<!-- /ko -->
+						<input type="button" class="remove_button" data-bind="click: function() {$root[field_name](null)}" value="x" />
 					</div>
-				<!-- /ko -->
-				<!-- ko if: !$root[field_name]() && !editable -->
-					<div class="uneditable" data-bind="text: '<?php echo trans('administrator::administrator.no_file_uploaded') ?>'"></div>
 				<!-- /ko -->
 			<!-- /ko -->
 
 			<!-- ko if: type === 'color' -->
-				<!-- ko if: editable -->
-					<input type="text" data-type="color" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name]" />
-				<!-- /ko -->
-				<!-- ko ifnot: editable -->
-					<div class="uneditable" data-bind="text: $root[field_name]()"></div>
-				<!-- /ko -->
+				<input type="text" data-type="color" data-bind="attr: {disabled: $root.freezeForm, id: field_id}, value: $root[field_name]" />
 				<div class="color_preview" data-bind="style: {backgroundColor: $root[field_name]}, visible: $root[field_name]"></div>
-			<!-- /ko -->
-
-			<!-- ko if: $data.description && (type === 'bool' || type === 'key') -->
-				<p class="description_below" data-bind="text: description"></p>
 			<!-- /ko -->
 			</div>
 		<!-- /ko -->

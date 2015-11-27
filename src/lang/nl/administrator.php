@@ -23,8 +23,6 @@ return array(
 	'imageuploading' => 'Afbeelding Uploading',
 	'uploadfile' => 'Upload File',
 	'fileuploading' => 'File Uploading',
-	'no_image_uploaded' => 'No image uploaded',
-	'no_file_uploaded' => 'No file uploaded',
 	'none' => 'Geen',
 	'all' => 'Alle',
 	'itemsperpage' => 'items per pagina',

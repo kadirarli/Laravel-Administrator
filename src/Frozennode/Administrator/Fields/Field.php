@@ -54,7 +54,6 @@ abstract class Field {
 		'editable' => true,
 		'visible' => true,
 		'setter' => false,
-		'description' => '',
 		'value' => '',
 		'min_value' => '',
 		'max_value' => '',

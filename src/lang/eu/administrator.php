@@ -23,8 +23,6 @@ return array(
 	'imageuploading' => 'Irudia Igotzen',
 	'uploadfile' => 'Upload File',
 	'fileuploading' => 'Uploading File',
-	'no_image_uploaded' => 'No image uploaded',
-	'no_file_uploaded' => 'No file uploaded',
 	'none' => 'Hutsik',
 	'all' => 'Guztiak',
 	'itemsperpage' => 'item orrialdeko',

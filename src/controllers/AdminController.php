@@ -21,8 +21,11 @@ use Frozennode\Administrator\Fields\Field;
 class AdminController extends Controller
 {
 
-	protected $layout = "administrator::layouts.default";
-
+	/*
+	 * edit by tekinaggul
+	 * orginal: protected $layout = "administrator::layouts.default";
+	 */
+	protected $layout = "administrator::layouts.default2";
 	/**
 	 * Setup the layout used by the controller.
 	 *
