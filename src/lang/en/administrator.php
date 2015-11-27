@@ -29,8 +29,8 @@ return array(
 	'all' => 'All',
 	'itemsperpage' => 'items per page',
 	'noresults' => 'No Results',
-	'backtosite' => 'Back to Site 1234567890*-',
-	'logout' => 'Logout 1234567890*-',
+	'backtosite' => 'Back to Site',
+	'logout' => 'Logout',
 
 	'previous' => 'prev',
 	'next' => 'next',
