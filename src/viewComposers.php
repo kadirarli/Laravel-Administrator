@@ -149,7 +149,7 @@ View::composer(array('administrator::layouts.default'), function($view)
 		//localization js assets
 		$locale = Config::get('app.locale');
 
-		if ($locale !== 'en')
+		if ($locale !== 'EN')
 		{
 			$view->js += array(
 				'plupload-l18n' => asset('packages/frozennode/administrator/js/plupload/js/i18n/'.$locale.'.js'),
@@ -221,7 +221,7 @@ View::composer(array('administrator::layouts.default2'), function($view)
 		//localization js assets
 		$locale = Config::get('app.locale');
 
-		if ($locale !== 'en')
+		if ($locale !== 'EN')
 		{
 			$view->js += array(
 				'plupload-l18n' => asset('packages/frozennode/administrator/js/plupload/js/i18n/'.$locale.'.js'),
