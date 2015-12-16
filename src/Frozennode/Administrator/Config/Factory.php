@@ -73,6 +73,7 @@ class Factory {
 		'home_page' => 'string',
 		'login_path' => 'required|string',
 		'login_redirect_key' => 'required|string',
+		'user' => 'required|array'
 	);
 
 	/**

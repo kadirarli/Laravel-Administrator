@@ -12,7 +12,11 @@
 	<!--[if lte IE 9]>
 		<link href="{{asset('packages/frozennode/administrator/css/browsers/lte-ie9.css')}}" media="all" type="text/css" rel="stylesheet">
 	<![endif]-->
-
+	<style type="text/css">
+	.content {
+		min-height: 100vh !important;
+	}
+	</style>
 </head>
 <body>
 	<div id="wrapper">

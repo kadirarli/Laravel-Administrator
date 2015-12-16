@@ -7,30 +7,28 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ asset("/bower_components/adminlte/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image" />
+                <img src="{{ asset(str_replace('.png', '-50x50.png', Config::get('administrator::administrator.user')[0]->profile_photo)) }}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
-                <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <p>{{ Config::get('administrator::administrator.user')[0]->first_name." ".Config::get('administrator::administrator.user')[0]->last_name }}</p>
             </div>
         </div>
 
         <!-- search form (Optional) -->
-        <form action="#" method="get" class="sidebar-form">
+        <!--form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
 <span class="input-group-btn">
   <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
 </span>
             </div>
-        </form>
+        </form-->
         <!-- /.search form -->
        
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="item"><a href="{{URL::to(Config::get('administrator::administrator.back_to_site_path', '/'))}}" id="back_to_site">{{trans('administrator::administrator.backtosite')}}</a></li>
-            <li class="header">HEADER</li>
+            <li class="header">MENÜ</li>
             @foreach ($menu as $key => $item)
                 @if (is_array($item))
                 <li class="treeview">
