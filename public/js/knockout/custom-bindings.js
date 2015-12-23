@@ -564,6 +564,7 @@
 				{
 					window.admin.resizePage();
 				});
+				editor.resize( '350', '350' );
 			});
 
 			//wire up the blur event to ensure our observable is properly updated
