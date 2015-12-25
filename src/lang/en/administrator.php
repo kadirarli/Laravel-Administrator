@@ -29,6 +29,8 @@ return array(
 	'noresults' => 'No Results',
 	'backtosite' => 'Back to Site',
 	'logout' => 'Logout',
+	'menu' => 'menu',
+	'member_since' => 'Member since :date',
 
 	'previous' => 'prev',
 	'next' => 'next',

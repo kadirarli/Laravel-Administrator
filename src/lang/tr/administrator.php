@@ -29,6 +29,8 @@ return array(
 	'noresults' => 'Bulunamadı',
 	'backtosite' => 'Siteye Dön',
 	'logout' => 'Çıkış',
+	'menu' => 'menü',
+	'member_since' => ':date tarihinden beri',
 
 	'previous' => 'önceki',
 	'next' => 'sonraki',
