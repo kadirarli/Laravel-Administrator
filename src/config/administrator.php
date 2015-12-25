@@ -128,5 +128,5 @@ return array(
 	 * @type array
 	 */
 	'locales' => array(),
-
+	'user' => array()
 );

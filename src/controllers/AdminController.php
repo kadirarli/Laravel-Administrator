@@ -25,7 +25,7 @@ class AdminController extends Controller
 	 * edit by tekinaggul
 	 * orginal: protected $layout = "administrator::layouts.default";
 	 */
-	protected $layout = "administrator::layouts.default2";
+	protected $layout = "administrator::layouts.default-lte";
 	/**
 	 * Setup the layout used by the controller.
 	 *

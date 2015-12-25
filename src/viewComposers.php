@@ -177,14 +177,18 @@ View::composer(array('administrator::layouts.default'), function($view)
 	$view->js += array('page' => asset('packages/frozennode/administrator/js/page.js'));
 });
 
-View::composer(array('administrator::layouts.default2'), function($view)
+View::composer(array('administrator::layouts.default-lte'), function($view)
 {
 	//set up the basic asset arrays
 	$view->css = array();
 	$view->js = array(
-		'jquery' => asset('packages/frozennode/administrator/js/jquery/jquery-1.8.2.min.js'),
+		'jquery' => asset('packages/frozennode/administrator/bower_components/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js'),
+		'jquery_migrate' => asset('http://code.jquery.com/jquery-migrate-1.2.1.js'),
 		'jquery-ui' => asset('packages/frozennode/administrator/js/jquery/jquery-ui-1.10.3.custom.min.js'),
 		'customscroll' => asset('packages/frozennode/administrator/js/jquery/customscroll/jquery.customscroll.js'),
+		'ckeditor' => asset('https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js'),
+		'bootstrap' => asset('packages/frozennode/administrator/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js'),
+		'app' => asset('packages/frozennode/administrator/bower_components/AdminLTE/dist/js/app.min.js')
 	);
 
 	//add the non-custom-page css assets
@@ -194,9 +198,7 @@ View::composer(array('administrator::layouts.default2'), function($view)
 			'jquery-ui' => asset('packages/frozennode/administrator/css/ui/jquery-ui-1.9.1.custom.min.css'),
 			'jquery-ui-timepicker' => asset('packages/frozennode/administrator/css/ui/jquery.ui.timepicker.css'),
 			'select2' => asset('packages/frozennode/administrator/js/jquery/select2/select2.css'),
-			'jquery-colorpicker' => asset('packages/frozennode/administrator/css/jquery.lw-colorpicker.css'),
-			//'theme' => asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css"),
-			//'theme_blue'=>  asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css")
+			'jquery-colorpicker' => asset('packages/frozennode/administrator/css/jquery.lw-colorpicker.css'),	
 		);
 	}
 
@@ -204,6 +206,11 @@ View::composer(array('administrator::layouts.default2'), function($view)
 	$view->css += array(
 		'customscroll' => asset('packages/frozennode/administrator/js/jquery/customscroll/customscroll.css'),
 		'main' => asset('packages/frozennode/administrator/css/main.css'),
+		'bootstrap' => asset('packages/frozennode/administrator/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css'),
+		'font-awesome' => asset('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
+		'ionicons' => asset('http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css'),
+		'AdminLTE' => asset('packages/frozennode/administrator/bower_components/AdminLTE/dist/css/AdminLTE.min.css'),
+		'skin-blue' => asset('packages/frozennode/administrator/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css')
 	);
 
 	//add the non-custom-page js assets
