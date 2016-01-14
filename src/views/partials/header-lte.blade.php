@@ -9,7 +9,7 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <?php if(isset(Config::get('administrator::administrator.user')[0]->profile_photo)){ ?>
-                            <img src="{{ asset(Config::get('administrator::administrator.user')[0]->profile_photo) }}" class="user-image" alt="User Image"/>
+                            <img src="{{ asset(str_replace('.png', '-50x50.png', Config::get('administrator::administrator.user')[0]->profile_photo)) }}" class="user-image" alt="User Image"/>
                         <?php } ?>
                         <?php if(isset(Config::get('administrator::administrator.user')[0]->name)){ ?>
                             <span class="hidden-xs">{{ Config::get('administrator::administrator.user')[0]->name." ".Config::get('administrator::administrator.user')[0]->surname }}</span>
@@ -18,7 +18,7 @@
                     <ul class="dropdown-menu">
                         <li class="user-header">
                             <?php if(isset(Config::get('administrator::administrator.user')[0]->profile_photo)){ ?>
-                                <img src="{{ asset(Config::get('administrator::administrator.user')[0]->profile_photo) }}" class="img-circle" alt="User Image" />
+                                <img src="{{ asset(str_replace('.png', '-198x198.png', Config::get('administrator::administrator.user')[0]->profile_photo)) }}" class="img-circle" alt="User Image" />
                             <?php } ?>
                             <p>
                             <?php if(isset(Config::get('administrator::administrator.user')[0]->name)){ ?>
